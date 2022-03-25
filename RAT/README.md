@@ -425,13 +425,13 @@ Scripts in this section will:
 
 ## HTML Report
 
-![OS Tab - HTML](https://github.com/keithtay8/PISCES/blob/main/images/html_os.PNG?raw=true)
+![OS Tab - HTML](https://github.com/keithtay8/PISCES/blob/master/images/html_os.PNG?raw=true)
 
-![User Tab - HTML](https://github.com/keithtay8/PISCES/blob/main/images/html_user.PNG?raw=true)
+![User Tab - HTML](https://github.com/keithtay8/PISCES/blob/master/images/html_user.PNG?raw=true)
 
-![Privileged Files Tab - HTML](https://github.com/keithtay8/PISCES/blob/main/images/html_priv.PNG?raw=true)
+![Privileged Files Tab - HTML](https://github.com/keithtay8/PISCES/blob/master/images/html_priv.PNG?raw=true)
 
-![Pi-Specific Tab - HTML](https://github.com/keithtay8/PISCES/blob/main/images/html_pi-spec.PNG?raw=true)
+![Pi-Specific Tab - HTML](https://github.com/keithtay8/PISCES/blob/master/images/html_pi-spec.PNG?raw=true)
 
 ---
 
@@ -441,7 +441,7 @@ There are some customizable options.
 
 ### One set is in the '**_launcher.sh**'.
 
-![Confiugurable Options - Launcher](https://github.com/keithtay8/PISCES/blob/main/images/launcher_opts.PNG?raw=true)
+![Confiugurable Options - Launcher](https://github.com/keithtay8/PISCES/blob/master/images/launcher_opts.PNG?raw=true)
 
 From 'usersinfo.sh':
 
