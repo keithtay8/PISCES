@@ -12,6 +12,6 @@
 
 ## Table of Contents
 
-- [Raspbian Assessment Tool](#RAT)
-- [Raspbian Automated Baseline Scanner](#RABS)
-- [Raspbian Automated Hardener](#RAH)
+- [Raspbian Assessment Tool](https://github.com/keithtay8/PISCES/tree/master/RAT)
+- [Raspbian Automated Baseline Scanner](https://github.com/keithtay8/PISCES/tree/master/RABS)
+- [Raspbian Automated Hardener](https://github.com/keithtay8/PISCES/tree/master/RAH)
