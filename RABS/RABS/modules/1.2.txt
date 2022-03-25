@@ -1,0 +1,12 @@
+### Configure Software Updates
+### 1.2.1 to 1.2.2
+
+
+[1.2.1 || (!) Ensure package manager repositories are configured || Manual]{Active}
+apt-cache policy 
+	~	.+
+
+
+[1.2.2 || (!) Ensure GPG keys are configured || Manual]{Active}
+apt-key list
+	~	.+

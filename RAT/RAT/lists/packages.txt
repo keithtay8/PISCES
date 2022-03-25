@@ -1,0 +1,47 @@
+### Contains list of packages to check for, all lines to check for are interpreted as REGEX, all HEADERS/CLOSURES ARE INTERPRETED IN SEQUENCE
+### 	[PACKAGE_NAME]
+###	/ABSOLUTE/FILE/PATH.extension
+###		<;;<OPTIONAL_START_FROM_THIS_STRING>;;>
+###		EXACT_REGEX_STRING_TO_MATCH
+###		EXACT_REGEX_STRING_TO_MATCH_2
+###		<;;<OPTIONAL_END_WHEN_THIS_STRING>;;>
+
+[fail2ban]
+/etc/fail2ban/jail.local
+	<;;<\[ssh\]>;;>
+	enabled = true
+	port = ssh
+	bantime = ([1-9][0-9]{3,}|[7-9][0-9]{2}|6(0[1-9]|[1-9][0-9]))
+	banaction = iptables-allports
+	maxretry = ([1-9][0-9]+|[3-9])
+	<;;<\[.+\]>;;>
+
+[unattended-upgrades]
+/etc/apt/apt.conf.d/50unattended-upgrades
+	<;;<Unattended-Upgrade::Origins-Pattern {>;;>
+		"o=\${distro_id},n=\${distro_codename},l=.+";
+	<;;<};>;;>
+
+[ufw]
+/etc/default/ufw
+	IPV6=yes
+	DEFAULT_INPUT_POLICY="DROP"
+/etc/ufw/ufw.conf
+	ENABLED=yes
+/etc/ufw/user.rules
+	-A ufw-user-input -p tcp --dport 22 -j ACCEPT.+
+/etc/ufw/user6.rules
+
+[psad]
+/etc/psad/psad.conf
+
+###[pkg_test]
+###/home/pi/pkg_test.txt
+###	<;;<\[this is a text header\]>;;>
+###	file=true
+###	<;;<\[please ignore this\]>;;>
+###	wow what is this??
+###	this text should be 100% ignored
+###	if not then im screwed	
+###	<;;<\[start here again\]>;;>
+###	pickup all the starfish

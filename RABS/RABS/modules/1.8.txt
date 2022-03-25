@@ -1,0 +1,33 @@
+### GNOME Display Manager
+### 1.8.1 to 1.9
+
+
+[1.8.1 || (Original) Ensure GNOME Display Manager is removed || Manual]{Inactive}
+dpkg -s gdm3 | grep -E '(Status:|not installed)'
+	dpkg-query: package 'gdm3' is not installed and no information is available
+
+
+[1.8.1 || (Raspbian) Ensure X11 Window System (GUI) is removed || Manual]{Active}
+dpkg -s x11-common | grep -E '(Status:|not installed)'
+	dpkg-query: package 'x11-common' is not installed and no information is available
+
+
+[1.8.2 || (!) (Original) Ensure GDM login banner is configured || Automated]{Inactive}
+cat /etc/gdm3/greeter.dconf-defaults | grep 'banner-message-enable=true'
+	~	.+
+cat /etc/gdm3/greeter.dconf-defaults | grep "banner-message-text='<banner message>'"
+	~	.+
+
+[1.8.3 || (Original) Ensure disable-user-list is enabled || Automated]{Inactive}
+## THIS IS VERY SLOW
+grep -E '^\s*disable-user-list\s*=\s*true\b'
+	disabled-user-list=true
+
+
+[1.8.4 || (Original) Ensure XDCMP is not enabled || Automated]{Inactive}
+grep -Eis '^\s*Enable\s*=\s*true' /etc/gdm3/custom.conf
+
+
+[1.9 || (!) Ensure updates,patches,and additional security software are installed || Manual]{Active}
+apt -s upgrade
+	~	0(\s+)upgraded,(\s+)0(\s+)newly(\s+)installed

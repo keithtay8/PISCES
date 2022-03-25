@@ -1,0 +1,77 @@
+### Network Parameters (Host and Router)
+### 3.3.1 to 3.3.9
+
+
+[3.3.1 || Ensure source routed packets are not accepted || Automated]{Active}
+sysctl net.ipv4.conf.all.accept_source_route; echo; grep "net\.ipv4\.conf\.all\.accept_source_route" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv4.conf.all.accept_source_route = 0
+sysctl net.ipv4.conf.default.accept_source_route; echo; grep "net\.ipv4\.conf\.default\.accept_source_route" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv4.conf.default.accept_source_route = 0
+
+
+[3.3.1.1 || (IPv6) Ensure source routed packets are not accepted || Automated]{Active}
+#IF IPv6 is enabled
+sysctl net.ipv6.conf.all.accept_source_route; echo; grep "net\.ipv6\.conf\.all\.accept_source_route" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv6.conf.all.accept_source_route = 0
+sysctl net.ipv6.conf.default.accept_source_route; echo; grep "net\.ipv6\.conf\.default\.accept_source_route" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv6.conf.default.accept_source_route = 0
+
+
+[3.3.2 || Ensure ICMP redirects are not accepted || Automated]{Active}
+sysctl net.ipv4.conf.all.accept_redirects; echo; grep "net\.ipv4\.conf\.all\.accept_redirects" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv4.conf.all.accept_redirects = 0
+sysctl net.ipv4.conf.default.accept_redirects; echo; grep "net\.ipv4\.conf\.default\.accept_redirects" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv4.conf.default.accept_redirects = 0
+
+
+[3.3.2.1 || (IPv6) Ensure ICMP redirects are not accepted || Automated]{Active}
+#IF IPv6 is enabled
+sysctl net.ipv6.conf.all.accept_redirects; echo; grep "net\.ipv6\.conf\.all\.accept_redirects" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv6.conf.all.accept_redirects = 0
+sysctl net.ipv6.conf.default.accept_redirects; echo; grep "net\.ipv6\.conf\.default\.accept_redirects" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv6.conf.default.accept_redirects = 0
+
+
+[3.3.3 || Ensure secure ICMP redirects are not accepted || Automated]{Active}
+sysctl net.ipv4.conf.all.secure_redirects; echo; grep "net\.ipv4\.conf\.all\.secure_redirects" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv4.conf.all.secure_redirects = 0
+sysctl net.ipv4.conf.default.secure_redirects; echo; grep "net\.ipv4\.conf\.default\.secure_redirects" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv4.conf.default.secure_redirects = 0
+
+
+[3.3.4 || Ensure suspicious packets are logged || Automated]{Active}
+sysctl net.ipv4.conf.all.log_martians; echo; grep "net\.ipv4\.conf\.all\.log_martians" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv4.conf.all.log_martians = 1
+sysctl net.ipv4.conf.default.log_martians; echo; grep "net\.ipv4\.conf\.default\.log_martians" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv4.conf.default.log_martians = 1
+
+
+[3.3.5 || Ensure broadcast ICMP request are ignored || Automated]{Active}
+sysctl net.ipv4.icmp_echo_ignore_broadcasts; echo; grep "net\.ipv4\.icmp_echo_ignore_broadcasts" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv4.icmp_echo_ignore_broadcasts = 1
+
+
+[3.3.6 || Ensure bogus ICMP responses are ignored || Automated]{Active}
+sysctl net.ipv4.icmp_ignore_bogus_error_responses; echo; grep "net.ipv4.icmp_ignore_bogus_error_responses" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv4.icmp_ignore_bogus_error_responses = 1
+
+
+[3.3.7 || Ensure Reverse Path Filtering is enabled || Automated]{Active}
+sysctl net.ipv4.conf.all.rp_filter; echo; grep "net\.ipv4\.conf\.all\.rp_filter" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv4.conf.all.rp_filter = 1
+sysctl net.ipv4.conf.default.rp_filter; echo; grep "net\.ipv4\.conf\.default\.rp_filter" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv4.conf.default.rp_filter = 1
+
+
+[3.3.8 || Ensure TCP SYN Cookies is enabled || Automated]{Active}
+sysctl net.ipv4.tcp_syncookies; echo; grep "net\.ipv4\.tcp_syncookies" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv4.tcp_syncookies = 1
+
+
+[3.3.9 || (IPv6) Ensure IPv6 router advertisements are not accepted || Automated]{Active}
+#IF IPv6 is enabled
+sysctl net.ipv6.conf.all.accept_ra; echo; grep "net\.ipv6\.conf\.all\.accept_ra" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv6.conf.all.accept_ra = 0
+sysctl net.ipv6.conf.default.accept_ra; echo; grep "net\.ipv6\.conf\.default\.accept_ra" /etc/sysctl.conf /etc/sysctl.d/*
+	net.ipv6.conf.default.accept_ra = 0
+

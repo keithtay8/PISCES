@@ -1,0 +1,50 @@
+#!/bin/bash
+# CIS Ubuntu 20.04
+# 1.1.23 [L2] Disable Automounting (Automated);;;1.1.23: success
+# 1.1.24 [L2] Disable USB Storage (Automated);;;1.1.24: success
+
+audit='<<AUDIT>>'
+breakpoint='<<BREAKPOINT>>'
+wr_p='<<WR_P>>'
+
+
+if [[ ${#BASH_ARGV} = 2 ]]; then
+	mods=('1.1.23' '1.1.24')
+	for count in $(seq 0 1); do
+		if [[ ${BASH_ARGV:$count:1} = '1' ]]; then
+			if [[ $(grep 'Pi' /proc/cpuinfo) ]]; then
+				IFS=$'\n' users=($(grep -vP '(nologin|sync|false)' /etc/passwd)) audit_check=('mount_on_startup=0' 'mount_removable=0') audit_pass=()
+				for user in ${users[@]}; do
+					user=$(cut -d ':' -f 1 <<< "$user")
+					if [[ ! $(grep "${audit_check[$count]}" "/home/$user/.config/pcmanfm/LXDE-pi/pcmanfm.conf" 2>/dev/null) ]]; then
+						cmds=("sed -i -- 's/mount_on_startup=1/mount_on_startup=0/g' /home/$user/.config/pcmanfm/LXDE-pi/pcmanfm.conf" "sed -i -- 's/mount_removable=1/mount_removable=0/g' /home/$user/.config/pcmanfm/LXDE-pi/pcmanfm.conf")
+						cmd=${cmds[$count]}
+						if [[ -f "/home/$user/.config/pcmanfm/LXDE-pi/pcmanfm.conf" ]]; then
+							(set -- word && eval $cmd)
+						else
+							echo "$user: missing pcmanfm.conf, skipping"
+						fi
+					else
+						echo "$user validated"
+						audit_check+=("$user")
+					fi
+				done && echo "${mods[$count]}: success" || echo "${mods[$count]}: failed"
+				if [[ ${#audit_check[@]} = ${#users[@]} ]]; then
+					echo "$audit"
+				fi
+			else
+				if [[ $count == 0 ]]; then
+					systemctl --now disable autofs && echo "${mods[$count]}: success" || echo "${mods[$count]}: failed"
+				elif [[ $count == 1 ]]; then
+					if [[ ! -f /etc/modprobe.d/usb_storage.conf ]]; then
+						echo 'install usb-storage /bin/true' > '/etc/modprobe.d/usb_storage.conf'
+						rmmod usb-storage
+					else
+						echo '/etc/modprobe.d/usb_storage.conf exists, left unmodified'; echo "$wr_p"
+					fi && echo "${mods[$count]}: success" || echo "${mods[$count]}: failed"
+				fi
+			fi
+		fi
+		echo "$breakpoint"
+	done
+fi

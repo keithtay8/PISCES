@@ -1,0 +1,200 @@
+### Firewall Configuration
+### 3.5.1.1 to 3.5.3.3.4
+# ENSURE ONLY ONE SET IS ENABLED (3.5.1 OR 3.5.2 OR 3.5.3)
+
+
+### 3.5.1 CONFIGURE ufw
+[3.5.1.1 || Ensure ufw is installed || Automated]{Active}
+dpkg -s ufw | grep 'Status: install'
+	Status: install ok installed
+
+
+[3.5.1.2 || Ensure iptables-persistent is not installed with ufw || Automated]{Active}
+dpkg-query -s iptables-persistent
+	~	(dpkg-query: )?package 'iptables-persistent' is not installed and no information is available
+
+
+[3.5.1.3 || Ensure ufw service is enabled || Automated]{Active}
+systemctl is-enabled ufw
+	enabled
+ufw status | grep Status
+	Status: active
+
+
+[3.5.1.4 || Ensure ufw loopback traffic is configured || Automated]{Active}
+ufw status verbose
+	~	Anywhere on lo(\s+)ALLOW IN(\s+)Anywhere
+	~	Anywhere(\s+)DENY IN(\s+)127\.0\.0\.0/8
+	~	Anywhere \(v6\) on lo(\s+)ALLOW IN(\s+)Anywhere \(v6\)
+	~	Anywhere \(v6\)(\s+)DENY IN(\s+)::1
+	~	Anywhere \(v6\)(\s+)ALLOW OUT(\s+)Anywhere on lo
+	~	Anywhere \(v6\)(\s+)ALLOW OUT(\s+)Anywhere \(v6\) on lo
+
+
+[3.5.1.5 || (!) Ensure ufw outbound connections are configured || Manual]{Active}
+ufw status numbered
+	~	.+
+
+
+[3.5.1.6 || (!) Ensure ufw firewall rules exist for all open ports || Manual]{Active}
+ss -4tuln
+	~	.+
+ufw status verbose
+	~	.+
+
+
+[3.5.1.7 || Ensure ufw default deny firewall policy || Automated]{Active}
+ufw status verbose
+	~	Default:\s(deny|reject)\s\(incoming\),\s(deny|reject)\s\(outgoing\),\s(deny|reject|disabled)\s\(routed\)
+
+
+### 3.5.2 CONFIGURE nftables
+[3.5.2.1 || Ensure nftables is installed || Automated]{Inactive}
+dpkg-query -s nftables | grep 'Status: install ok installed'
+	Status: install ok installed
+
+
+[3.5.2.2 || Ensure ufw is uninstalled or disabled with nftables || Automated]{Inactive}
+ufw status
+	Status: inactive
+dpkg-query -s ufw | grep 'Status: install ok installed'
+	~	(dpkg-query: )?package 'ufw' is not installed and no information is available
+
+
+[3.5.2.3 || Ensure iptables are flushed with nftables || Manual]{Inactive}
+iptables -L
+ip6tables -L
+
+
+[3.5.2.4 || (!) Ensure a nftables table exists || Automated]{Inactive}
+nft list tables
+	~	.+
+
+
+[3.5.2.5 || Ensure nftables base chains exist || Automated]{Inactive}
+nft list ruleset | grep 'hook input'
+	type filter hook input priority 0;
+nft list ruleset | grep 'hook forward'
+	type filter hook forward priority 0;
+nft list ruleset | grep 'hook output'
+	type filter hook output priority 0;
+
+
+[3.5.2.6 || Ensure nftables loopback traffic is configured || Automated]{Inactive}
+nft list ruleset | awk '/hook input/,/}/' | grep 'iif "lo" accept'
+	~	.+iif "lo" accept.+
+nft list ruleset | awk '/hook input/,/}/' | grep 'ip saddr'
+	~	.+ip saddr 127\.0\.0\.0\/8 counter packets 0 bytes 0 drop.+
+
+
+[3.5.2.6.1 || (IPv6) Ensure nftables loopback traffic is configured || Automated]{Inactive}
+ nft list ruleset | awk '/hook input/,/}/' | grep 'ip6 saddr'
+	~	ip6 saddr ::1 counter packets 0 bytes 0 drop
+
+
+[3.5.2.7 || (Ensure nftables outbound and established connections are configured || Manual]{Inactive}
+nft list ruleset | awk '/hook input/,/}/' | grep -E 'ip protocol (tcp|udp|icmp) ct state'
+	ip protocol tcp ct state established accept
+	ip protocol udp ct state established accept
+	ip protocol icmp ct state established accept
+nft list ruleset | awk '/hook output/,/}/' | grep -E 'ip protocol (tcp|udp|icmp) ct state'
+	ip protocol tcp ct state established,related,new accept
+	ip protocol udp ct state established,related,new accept
+	ip protocol icmp ct state established,related,new accept
+
+
+[3.5.2.8 || Ensure nftables default deny firewall policy || Automated]{Inactive}
+nft list ruleset | grep 'hook input'
+	type filter hook input priority 0; policy drop;
+nft list ruleset | grep 'hook forward'
+	type filter hook forward priority 0; policy drop;
+nft list ruleset | grep 'hook output'
+	type filter hook output priority 0; policy drop;
+
+
+[3.5.2.9 || Ensure nftables service is enabled || Automated]{Inactive}
+systemctl is-enabled nftables
+	enabled
+
+
+[3.5.2.10 || (!) Ensure nftables rules are permanent || Automated]{Inactive}
+[ -n "$(grep -E '^\s*include' /etc/nftables.conf)" ] && awk '/hook input/,/}/' $(awk '$1 ~ /^\s*include/ { gsub("\"","",$2);print $2 }' /etc/nftables.conf)
+	~	.+
+[ -n "$(grep -E '^\s*include' /etc/nftables.conf)" ] && awk '/hook forward/,/}/' $(awk '$1 ~ /^\s*include/ { gsub("\"","",$2);print $2 }' /etc/nftables.conf)
+	~	.+
+[ -n "$(grep -E '^\s*include' /etc/nftables.conf)" ] && awk '/hook output/,/}/' $(awk '$1 ~ /^\s*include/ { gsub("\"","",$2);print $2 }' /etc/nftables.conf)
+	~	.+
+
+
+### 3.5.3 CONFIGURE iptables
+[3.5.3.1.1 || Ensure iptables packages are installed || Automated]{Inactive}
+apt list iptables iptables-persistent | grep installed
+	~	iptables-persistent/[a-zA-Z0-9. ]+ [installed,automatic]
+	~	iptables/[a-zA-Z0-9. ]+ [installed,automatic]
+
+
+[3.5.3.1.2 || Ensure nftables is not installed with iptables || Automated]{Inactive}
+dpkg -s nftables
+	~	(dpkg-query: )?package 'nftables' is not installed and no information is available
+
+
+[3.5.3.1.3 || Ensure ufw is uninstalled or disabled with iptables || Automated]{Inactive}
+dpkg-query -s ufw
+	~	(dpkg-query: )?package 'ufw' is not installed and no information is available
+ufw status
+	Status: inactive
+systemctl is-enabled ufw
+	masked
+
+
+[3.5.3.2.1 || (!) Ensure iptables loopback traffic is configured || Automated]{Inactive}
+iptables -L INPUT -v -n
+	~	.+
+iptables -L OUTPUT -v -n
+	~	.+
+
+
+[3.5.3.2.2 || (!) Ensure iptables outbound and established connections are configured || Manual]{Inactive}
+iptables -L -v -n
+	~	.+
+
+
+[3.5.3.2.3 || Ensure iptables default deny firewall policy || Automated]{Inactive}
+iptables -L
+	Chain INPUT (policy DROP)
+	Chain FORWARD (policy DROP)
+	Chain OUTPUT (policy DROP)
+
+
+[3.5.3.2.4 || (!) Ensure iptables firewall rules exist for all open ports || Automated]{Inactive}
+ss -4tuln
+	~	.+
+iptables -L INPUT -v -n
+	~	.+
+
+
+[3.5.3.3.1 || (!) (IPv6) Ensure ip6tables loopback traffic is configured || Automated]{Inactive}
+ip6tables -L INPUT -v -n
+	~	.+
+ip6tables -L OUTPUT -v -n
+	~	.+
+
+
+[3.5.3.3.2 || (!) (IPv6) Ensure ip6tables outbound and established connections are configured || Manual]{Inactive}
+ip6tables -L -v -n
+	~	.+
+
+
+[3.5.3.3.3 || (IPv6) Ensure ip6tables default deny firewall policy || Automated]{Inactive}
+ip6tables -L
+	Chain INPUT (policy DROP)
+	Chain FORWARD (policy DROP)
+	Chain OUTPUT (policy DROP)
+
+
+[3.5.3.3.4 || (!) (IPv6) Ensure ip6tables firewall rules exist for all open ports || Automated]{Inactive}
+ ss -6tuln
+	~	.+
+ip6tables -L INPUT -v -n
+	~	.+
+

@@ -1,0 +1,26 @@
+### Secure Boot Settings
+### 1.4.1 to 1.4.4
+
+
+[1.4.1 || (GRUB) Ensure permissions on bootloader config are not overridden || Automated]{Active}
+grep -E '^\s*chmod\s+[0-7][0-7][0-7]\s+\$\{grub_cfg\}\.new' -A 1 -B1 /usr/sbin/grub-mkconfig
+	if [ "x${grub_cfg}" != "x" ]; then
+	chmod 400 ${grub_cfg}.new || true
+	fi
+
+
+[1.4.2 || (GRUB) Ensure bootloader password is set || Automated]{Active}
+grep "^set superusers" /boot/grub/grub.cfg
+	~	set superusers="[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\$)"
+grep "^password" /boot/grub/grub.cfg
+	~	password_pbkdf2 [a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\$) (\$[1-6]\$([a-zA-Z0-9]|\$|\/|\.)+)
+
+
+[1.4.3 || (GRUB) Ensure permissions on bootloader config are configured || Automated]{Active}
+stat /boot/grub/grub.cfg | grep -P '\([0-9][04]00.+root.+root\)'
+	~	(Access: \([0-9][04]00.+root.+root\))
+
+
+[1.4.4 || Ensure authentication required for single user mode || Automated]{Active}
+grep -Eq '^root:\$[0-9y]' /etc/shadow || echo "root is locked"
+

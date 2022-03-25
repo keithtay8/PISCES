@@ -1,0 +1,73 @@
+### User and Group Settings
+### 6.2.1 to 6.2.17
+
+
+[6.2.1 || Ensure accounts in /etc/passwd use shadowed passwords || Automated]{Active}
+awk -F: '($2 != "x" ) { print $1 " is not set to shadowed passwords "}' /etc/passwd
+
+
+[6.2.2 || (!) Ensure password fields are not empty || Automated]{Active}
+awk -F: '($2 == "" ) { print $1 " does not have a password "}' /etc/shadow
+
+
+[6.2.3 || Ensure all groups in /etc/passwd exist in /etc/group || Automated]{Active}
+./modules/6.2.3_audit.sh
+
+
+[6.2.4 || Ensure all users' home directories exist || Automated]{Active}
+./modules/6.2.4_audit.sh
+
+
+[6.2.5 || Ensure users own their home directories || Automated]{Inactive}
+# Might be broken, very long??
+./modules/6.2.5_audit.sh
+
+
+[6.2.6 || Ensure users' home directories permissions are 750 or more restrictive || Automated]{Active}
+./modules/6.2.6_audit.sh
+
+
+[6.2.7 || Ensure users' dot files are not group or world writable || Automated]{Active}
+./modules/6.2.7_audit.sh
+
+
+[6.2.8 || Ensure no users have .netrc files || Automated]{Active}
+./modules/6.2.8_audit.sh
+
+
+[6.2.9 || Ensure no users have .forward files || Automated]{Active}
+./modules/6.2.9_audit.sh
+
+
+[6.2.10 || Ensure no users have .rhosts files || Automated]{Active}
+./modules/6.2.10_audit.sh
+
+
+[6.2.11 || Ensure root is the only UID 0 account || Automated]{Active}
+awk -F: '($3 == 0) { print $1 }' /etc/passwd
+	root
+
+
+[6.2.12 || Ensure root PATH Integrity || Automated]{Active}
+./modules/6.2.12_audit.sh
+
+
+[6.2.13 || Ensure no duplicate UIDs exist || Automated]{Active}
+./modules/6.2.13_audit.sh
+
+
+[6.2.14 || Ensure no duplicate GIDs exist || Automated]{Active}
+cut -d: -f3 /etc/group | sort | uniq -d | while read x ; do echo "Duplicate GID ($x) in /etc/group"; done
+
+
+[6.2.15 || Ensure no duplicate user names exist || Automated]{Active}
+cut -d: -f1 /etc/passwd | sort | uniq -d | while read -r x; do echo "Duplicate login name $x in /etc/passwd"; done
+
+
+[6.2.16 || Ensure no duplicate group names exist || Automated]{Active}
+cut -d: -f1 /etc/group | sort | uniq -d | while read -r x; do echo "Duplicate group name $x in /etc/group"; done
+
+
+[6.2.17 || Ensure shadow group is empty || Automated]{Active}
+awk -F: '($1=="shadow") {print $NF}' /etc/group
+awk -F: -v GID="$(awk -F: '($1=="shadow") {print $3}' /etc/group)" '($4==GID) {print $1}' /etc/passwd

@@ -1,0 +1,142 @@
+### Configure SSH Server
+### 5.3.1 - 5.3.22
+
+
+[5.3.0 || (Custom) Check if sshd is running || Automated]{Active}
+# Custom to determine if to even run later sshd-related scripts or not
+ps -ef | grep sshd | grep -v 'grep'
+	~	.+
+
+
+[5.3.1 || Ensure permissions on /etc/ssh/sshd_config || Automated]{Active}
+stat /etc/ssh/sshd_config
+	~	Access: \([0-9][0-7]00.+\sroot\).+\sroot\)
+
+
+[5.3.2 || Ensure permissions on SSH private host key files are configured || Automated]{Active}
+find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec stat {} \;
+	~	Access: \([0-9][046]00.+\sroot\).+\sroot\)
+
+
+[5.3.3 || (!) Ensure permissions on SSH public host key files are configured || Automated]{Active}
+find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec stat {} \;
+	~	Access: \(0644\/-rw-r--r--\) +Uid: \( +0\/ +root\) +Gid: \( +0\/ +root\)
+
+
+[5.3.4 || (!) Ensure SSH access is limited || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep -Ei '^\s*(allow|deny)(users|groups)\s+\S+'
+	~	(?i)allowusers .+
+	~	(?i)allowgroups .+
+	~	(?i)denyusers .+
+	~	(?i)denygroups .+
+
+
+[5.3.5 || (!) Ensure SSH LogLevel is appropriate || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep loglevel
+	~	(?i)loglevel (VERBOSE|INFO)
+grep -is 'loglevel' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf |grep -Evi '(VERBOSE|INFO)'
+
+
+[5.3.6 || Ensure SSH X11 forwarding is disabled || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep -i x11forwarding
+	~	(?i)x11forwarding no
+grep -Eis '^\s*x11forwarding\s+yes' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf
+
+
+[5.3.7 || Ensure SSH MaxAuthTries is set to 4 or less || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep maxauthtries
+	~	(?i)maxauthtries [0-4]
+grep -Eis '^\s*maxauthtries\s+([5-9]|[1-9][0-9]+)' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf
+
+
+[5.3.8 || Ensure SSH IgnoreRhosts is enabled || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep ignorerhosts
+	~	(?i)ignorerhosts yes
+grep -Eis '^\s*ignorerhosts\s+no\b' /etc/ssh/sshd_config  /etc/ssh/sshd_config.d/*.conf
+
+
+[5.3.9 || Ensure SSH HostbasedAuthentication is disabled || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep hostbasedauthentication
+	~	(?i)hostbasedauthentication no
+grep -Eis '^\s*HostbasedAuthentication\s+yes' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf
+
+
+[5.3.10 || Ensure SSH root login is disabled || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep permitrootlogin
+	~	(?i)permitrootlogin no
+grep -Eis '^\s*PermitRootLogin\s+yes' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf
+
+
+[5.3.11 || Ensure SSH PermitEmptyPasswords is disabled || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep permitemptypasswords
+	~	(?i)permitemptypasswords no
+grep -Eis '^\s*PermitEmptyPasswords\s+yes' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf
+
+
+[5.3.12 || Ensure SSH PermitUserEnvironment is disabled || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep permituserenvironment
+	~	(?i)permituserenvironment no
+grep -Eis '^\s*PermitUserEnvironment\s+yes' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf
+
+
+[5.3.13 || Ensure only strong Ciphers are used || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep -Ei '^\s*ciphers\s+([^#]+,)?(3descbc|aes128-cbc|aes192-cbc|aes256-cbc|arcfour|arcfour128|arcfour256|blowfishcbc|cast128-cbc|rijndael-cbc@lysator.liu.se)\b'
+grep -Eis '^\s*ciphers\s+([^#]+,)?(3des-cbc|aes128-cbc|aes192-cbc|aes256-cbc|arcfour|arcfour128|arcfour256|blowfish-cbc|cast128-cbc|rijndaelcbc@lysator.liu.se)\b' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf
+
+
+[5.3.14 || Ensure only strong MAC algorithms are used || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep -Ei '^\s*macs\s+([^#]+,)?(hmacmd5|hmac-md5-96|hmac-ripemd160|hmac-sha1|hmac-sha1-96|umac64@openssh\.com|hmac-md5-etm@openssh\.com|hmac-md5-96-etm@openssh\.com|hmacripemd160-etm@openssh\.com|hmac-sha1-etm@openssh\.com|hmac-sha1-96-etm@openssh\.com|umac-64-etm@openssh\.com|umac-128-etm@openssh\.com)\b'
+grep -Eis '^\s*macs\s+([^#]+,)?(hmac-md5|hmac-md5-96|hmac-ripemd160|hmacsha1|hmac-sha1-96|umac-64@openssh\.com|hmac-md5-etm@openssh\.com|hmac-md5-96-etm@openssh\.com|hmac-ripemd160-etm@openssh\.com|hmac-sha1-etm@openssh\.com|hmac-sha1-96-etm@openssh\.com|umac-64-etm@openssh\.com|umac128-etm@openssh\.com)\b' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf
+
+
+[5.3.15 || Ensure only strong Key Exchange algorithms are used || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep -E i'^\s*kexalgorithms\s+([^#]+,)?(diffie-hellman-group1-sha1|diffie-hellmangroup14-sha1|diffie-hellman-group-exchange-sha1)\b'
+grep -Ei '^\s*kexalgorithms\s+([^#]+,)?(diffie-hellman-group1-sha1|diffiehellman-group14-sha1|diffie-hellman-group-exchange-sha1)\b' /etc/ssh/sshd_config
+
+
+[5.3.16 || Ensure SSH Idle Timeout Interval is configured || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep clientaliveinterval
+	~	(?i)clientaliveinterval [1-300]
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep clientalivecountmax
+	~	(?i)clientalivecountmax [1-3]
+grep -Eis '^\s*clientaliveinterval\s+(0|3[0-9][1-9]|[4-9][0-9][0-9]|[1-9][0-9][0-9][0-9]+|[6-9]m|[1-9][0-9]+m)\b' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf
+grep -Eis '^\s*ClientAliveCountMax\s+(0|[4-9]|[1-9][0-9]+)\b' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf
+
+
+[5.3.17 || Ensure SSH LoginGraceTime is set to one minute or less || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep logingracetime
+	~	(?i)logingracetime [1-60]
+grep -Eis '^\s*LoginGraceTime\s+(0|6[1-9]|[7-9][0-9]|[1-9][0-9][0-9]+|[^1]m)' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf
+
+
+[5.3.18 || Ensure SSH warning banner is configured || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep banner
+	~	(?i)banner /etc/issue.net
+grep -Eis '^\s*Banner\s+"?none\b' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf
+
+
+[5.3.19 || Ensure SSH PAM is enabled || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep -i usepam
+	~	(?i)usepam yes
+grep -Eis '^\s*UsePAM\s+no' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf
+
+
+[5.3.20 || (L2) Ensure SSH AllowTcpForwarding is disabled || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep -i allowtcpforwarding
+	~	(?i)allowtcpforwarding no
+grep -Eis '^\s*AllowTcpForwarding\s+yes\b' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf
+
+
+[5.3.21 || (!) Ensure SSH MaxStartups is configured || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep -i maxstartups
+	~	(?i)maxstartups 10:30:60
+grep -Eis '^\s*maxstartups\s+(((1[1-9]|[1-9][0-9][0-9]+):([0-9]+):([0-9]+))|(([0-9]+):(3[1-9]|[4-9][0-9]|[1-9][0-9][0-9]+):([0-9]+))|(([0-9]+):([0-9]+):(6[1-9]|[7-9][0-9]|[1-9][0-9][0-9]+)))' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf
+
+
+[5.3.22 || Ensure SSH MaxSessions is limited || Automated]{Active}
+sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" | grep -i maxsessions
+	~	(?i)MaxSessions [1-10]
+grep -Eis '^\s*MaxSessions\s+(1[1-9]|[2-9][0-9]|[1-9][0-9][0-9]+)' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf
+
+
+

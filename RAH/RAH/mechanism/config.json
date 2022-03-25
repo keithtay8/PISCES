@@ -1,0 +1,1016 @@
+{
+    "1.1.1.1": [
+        "Ensure mounting of cramfs filesystems is disabled (Automated)",
+        "cramfs: success",
+        "1.1.1.sh",
+        true
+    ],
+    "1.1.1.2": [
+        "Ensure mounting of freevxfs filesystems is disabled (Automated)",
+        "freevxfs: success",
+        "1.1.1.sh",
+        true
+    ],
+    "1.1.1.3": [
+        "Ensure mounting of jffs2 filesystems is disabled (Automated)",
+        "jffs2: success",
+        "1.1.1.sh",
+        true
+    ],
+    "1.1.1.4": [
+        "Ensure mounting of hfs filesystems is disabled (Automated)",
+        "hfs: success",
+        "1.1.1.sh",
+        true
+    ],
+    "1.1.1.5": [
+        "Ensure mounting of hfsplus filesystems is disabled (Automated)",
+        "hfsplus: success",
+        "1.1.1.sh",
+        true
+    ],
+    "1.1.1.6": [
+        "Ensure mounting of squashfs filesystems is disabled (Manual) [L2]",
+        "squashfs: success",
+        "1.1.1.sh",
+        true
+    ],
+    "1.1.1.7": [
+        "Ensure mounting of udf filesystems is disabled (Automated)",
+        "udf: success",
+        "1.1.1.sh",
+        true
+    ],
+    "1.1.2": [
+        "Ensure /tmp is configured (Automated)",
+        "1.1.2: success",
+        "1.1.2.sh",
+        true
+    ],
+    "1.1.6": [
+        "Ensure /dev/shm is configured (Automated)",
+        "1.1.6: success",
+        "1.1.2.sh",
+        true
+    ],
+    "1.1.22": [
+        "Ensure sticky bit is set on all world-writable directories (Automated)",
+        "1.1.22: success",
+        "1.1.22.sh",
+        true
+    ],
+    "1.3.1": [
+        "Ensure AIDE is installed (Automated)",
+        "1.3.1: ran",
+        "1.3.1.sh",
+        true
+    ],
+    "1.3.2": [
+        "Ensure filesystem integrity is regularly checked [via Cron] (Automated)",
+        "1.3.2: success",
+        "1.3.2.sh",
+        true
+    ],
+    "1.5.2": [
+        "Ensure address space layout randomization (ASLR) is enabled (Automated)",
+        "1.5.2: success",
+        "1.5.2.sh",
+        true
+    ],
+    "1.5.3": [
+        "Ensure prelink is not installed (Automated)",
+        "1.5.3: success",
+        "1.5.3.sh",
+        true
+    ],
+    "1.6.1.1": [
+        "Ensure AppArmor is installed (Automated)",
+        "1.6.1.1: success",
+        "1.6.1.sh",
+        true
+    ],
+    "1.6.1.2": [
+        "Ensure AppArmor is enabled in the bootloader configuration (Automated)",
+        "1.6.1.2: success",
+        "1.6.1.sh",
+        true
+    ],
+    "1.7.1": [
+        "Ensure message of the day is configured properly (Automated)",
+        "1.7.1: success",
+        "1.7.sh",
+        true
+    ],
+    "1.7.2": [
+        "Ensure local login warning banner is configured properly (Automated)",
+        "1.7.2: success",
+        "1.7.sh",
+        true
+    ],
+    "1.7.3": [
+        "Ensure remote login warning banner is configured properly (Automated)",
+        "1.7.3: success",
+        "1.7.sh",
+        true
+    ],
+    "1.7.4": [
+        "Ensure permissions on /etc/motd are configured (Automated)",
+        "1.7.4: success",
+        "1.7.sh",
+        true
+    ],
+    "1.7.5": [
+        "Ensure permissions on /etc/issue are configured (Automated)",
+        "1.7.5: success",
+        "1.7.sh",
+        true
+    ],
+    "1.7.6": [
+        "Ensure permissions on /etc/issue.net are configured (Automated)",
+        "1.7.6: success",
+        "1.7.sh",
+        true
+    ],
+    "1.8.1": [
+        "(Raspbian) Ensure X11 Window System (GUI) is removed",
+        "1.8.1: success",
+        "1.8.sh",
+        true
+    ],
+    "1.9": [
+        "Ensure updates, patches, and additional security software are installed (Manual)",
+        "1.9: success",
+        "1.8.sh",
+        true
+    ],
+    "2.1.1.1": [
+        "Ensure time synchronization is in use (Automated)",
+        "2.1.1.1: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.1.2": [
+        "Ensure systemd-timesyncd is configured (Automated)",
+        "2.1.1.2: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.2": [
+        "Ensure X Window System is not installed (Automated",
+        "2.1.2: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.3": [
+        "Ensure Avahi Server is not installed (Automated)",
+        "2.1.3: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.4": [
+        "[L2] Ensure CUPS is not installed (Automated)",
+        "2.1.4: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.5": [
+        "Ensure DHCP Server is not installed (Automated)",
+        "2.1.5: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.6": [
+        "Ensure LDAP server is not installed (Automated)",
+        "2.1.6: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.7": [
+        "Ensure NFS is not installed (Automated)",
+        "2.1.7: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.8": [
+        "Ensure DNS Server is not installed (Automated)",
+        "2.1.8: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.9": [
+        "Ensure FTP Server is not installed (Automated)",
+        "2.1.9: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.10": [
+        "Ensure HTTP server is not installed (Automated)",
+        "2.1.10: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.11": [
+        "Ensure IMAP and POP3 server are not installed (Automated)",
+        "2.1.11: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.12": [
+        "Ensure Samba is not installed (Automated)",
+        "2.1.12: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.13": [
+        "Ensure HTTP Proxy Server is not installed (Automated)",
+        "2.1.13: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.14": [
+        "Ensure SNMP Server is not installed (Automated)",
+        "2.1.14: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.15": [
+        "Ensure mail transfer agent is configured for local-only mode (Automated)",
+        "2.1.15: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.16": [
+        "Ensure rsync service is not installed (Automated)",
+        "2.1.16: success",
+        "2.1.sh",
+        false
+    ],
+    "2.1.17": [
+        "Ensure NIS Server is not installed (Automated)",
+        "2.1.17: success",
+        "2.1.sh",
+        false
+    ],
+    "2.2.1": [
+        "Ensure time synchronization is in use (Automated)",
+        "2.2.1: success",
+        "2.2.sh",
+        false
+    ],
+    "2.2.2": [
+        "Ensure rsh client is not installed (Automated)",
+        "2.2.2: success",
+        "2.2.sh",
+        false
+    ],
+    "2.2.3": [
+        "Ensure talk client is not installed (Automated)",
+        "2.2.3: success",
+        "2.2.sh",
+        false
+    ],
+    "2.2.4": [
+        "Ensure telnet client is not installed (Automated)",
+        "2.2.4: success",
+        "2.2.sh",
+        false
+    ],
+    "2.2.5": [
+        "Ensure LDAP client is not installed (Automated)",
+        "2.2.5: success",
+        "2.2.sh",
+        false
+    ],
+    "2.2.6": [
+        "Ensure RPC is not installed (Automated)",
+        "2.2.6: success",
+        "2.2.sh",
+        false
+    ],
+    "2.3": [
+        "Ensure nonessential services are removed or masked (Manual)",
+        "2.3: success",
+        "2.3.sh",
+        false
+    ],
+    "3.1.1": [
+        "[L2] Disable IPv6 (Manual)",
+        "3.1.1: success",
+        "3.1.sh",
+        false
+    ],
+    "3.1.2": [
+        "[L2] Ensure wireless interfaces are disabled (Automated)",
+        "3.1.2: success",
+        "3.1.sh",
+        false
+    ],
+    "3.2.1": [
+        "Ensure packet redirect sending is disabled (Automated)",
+        "3.2.1: success",
+        "3.2.sh",
+        false
+    ],
+    "3.2.2": [
+        "Ensure IP forwarding is disabled (Automated)",
+        "3.2.2: success",
+        "3.2.sh",
+        false
+    ],
+    "3.3.1": [
+        "Ensure source routed packets are not accepted (Automated)",
+        "3.3.1: success",
+        "3.3.sh",
+        false
+    ],
+    "3.3.2": [
+        "Ensure ICMP redirects are not accepted (Automated)",
+        "3.3.2: success",
+        "3.3.sh",
+        false
+    ],
+    "3.3.3": [
+        "Ensure secure ICMP redirects are not accepted (Automated)",
+        "3.3.3: success",
+        "3.3.sh",
+        false
+    ],
+    "3.3.4": [
+        "Ensure suspicious packets are logged (Automated)",
+        "3.3.4: success",
+        "3.3.sh",
+        false
+    ],
+    "3.3.5": [
+        "Ensure broadcast ICMP requests are ignored (Automated)",
+        "3.3.5: success",
+        "3.3.sh",
+        false
+    ],
+    "3.3.6": [
+        "Ensure bogus ICMP responses are ignored (Automated)",
+        "3.3.6: success",
+        "3.3.sh",
+        false
+    ],
+    "3.3.7": [
+        "Ensure Reverse Path Filtering is enabled (Automated)",
+        "3.3.7: success",
+        "3.3.sh",
+        false
+    ],
+    "3.3.8": [
+        "Ensure TCP SYN Cookies is enabled (Automated)",
+        "3.3.8: success",
+        "3.3.sh",
+        false
+    ],
+    "3.3.9": [
+        "Ensure IPv6 router advertisements are not accepted (Automated)",
+        "3.3.9: (IPv6-enabled) success",
+        "3.3.sh",
+        false
+    ],
+    "3.4.1": [
+        "[L2] Ensure DCCP is disabled (Automated)",
+        "3.4.1: success",
+        "3.4.sh",
+        false
+    ],
+    "3.4.2": [
+        "[L2] Ensure SCTP is disabled (Automated)",
+        "3.4.2: success",
+        "3.4.sh",
+        false
+    ],
+    "3.4.3": [
+        "[L2] Ensure RDS is disabled (Automated)",
+        "3.4.3: success",
+        "3.4.sh",
+        false
+    ],
+    "3.4.4": [
+        "[L2] Ensure TIPC is disabled (Automated)",
+        "3.4.4: success",
+        "3.4.sh",
+        false
+    ],
+    "3.5.1.1": [
+        "Ensure ufw is installed (Automated)",
+        "3.5.1.1: success",
+        "3.5.1.sh",
+        false
+    ],
+    "3.5.1.2": [
+        "Ensure iptables-persistent is not installed with ufw (Automated)",
+        "3.5.1.2: success",
+        "3.5.1.sh",
+        false
+    ],
+    "3.5.1.3": [
+        "Ensure ufw service is enabled (Automated)",
+        "3.5.1.3: success",
+        "3.5.1.sh",
+        false
+    ],
+    "3.5.1.4": [
+        "Ensure ufw loopback traffic is configured (Automated)",
+        "3.5.1.4: success",
+        "3.5.1.sh",
+        false
+    ],
+    "3.5.1.5": [
+        "Ensure ufw outbound connections are configured (Manual)",
+        "3.5.1.5: success",
+        "3.5.1.sh",
+        false
+    ],
+    "3.5.1.6": [
+        "Ensure ufw firewall rules exist for all open ports (Manual)",
+        "3.5.1.6: success",
+        "3.5.1.sh",
+        false
+    ],
+    "3.5.1.7": [
+        "Ensure ufw default deny firewall policy (Automated)",
+        "3.5.1.7: success",
+        "3.5.1.sh",
+        false
+    ],
+    "4.2.1.1": [
+        "Ensure rsyslog is installed (Automated)",
+        "4.2.1.1: success",
+        "4.2.sh",
+        false
+    ],
+    "4.2.1.2": [
+        "Ensure rsyslog Service is enabled (Automated)",
+        "4.2.1.2: success",
+        "4.2.sh",
+        false
+    ],
+    "4.2.1.3": [
+        "Ensure logging is configured (Manual)",
+        "4.2.1.3: success",
+        "4.2.sh",
+        false
+    ],
+    "4.2.1.4": [
+        "Ensure rsyslog default file permissions configured (Automated)",
+        "4.2.1.4: success",
+        "4.2.sh",
+        false
+    ],
+    "4.2.1.5": [
+        "Ensure rsyslog is configured to send logs to a remote log host (Automated)",
+        "4.2.1.5: success",
+        "4.2.sh",
+        false
+    ],
+    "4.2.1.6": [
+        "Ensure remote rsyslog messages are only accepted on designated log hosts. (Manual)",
+        "4.2.1.6: success",
+        "4.2.sh",
+        false
+    ],
+    "4.2.2.1": [
+        "Ensure journald is configured to send logs to rsyslog (Automated)",
+        "4.2.2.1: success",
+        "4.2.sh",
+        false
+    ],
+    "4.2.2.2": [
+        "Ensure journald is configured to compress large log files (Automated)",
+        "4.2.2.2: success",
+        "4.2.sh",
+        false
+    ],
+    "4.2.2.3": [
+        "Ensure journald is configured to write logfiles to persistent disk (Automated)",
+        "4.2.2.3: success",
+        "4.2.sh",
+        false
+    ],
+    "4.2.3": [
+        "Ensure permissions on all logfiles are configured (Automated)",
+        "4.2.3: success",
+        "4.2.sh",
+        false
+    ],
+    "4.4": [
+        "Ensure logrotate assigns appropriate permissions (Automated)",
+        "4.4: success",
+        "4.4.sh",
+        false
+    ],
+    "5.1.1": [
+        "Ensure cron daemon is enabled and running (Automated)",
+        "5.1.1: success",
+        "5.1.sh",
+        false
+    ],
+    "5.1.2": [
+        "Ensure permissions on /etc/crontab are configured (Automated)",
+        "5.1.2: success",
+        "5.1.sh",
+        false
+    ],
+    "5.1.3": [
+        "Ensure permissions on /etc/cron.hourly are configured (Automated)",
+        "5.1.3: success",
+        "5.1.sh",
+        false
+    ],
+    "5.1.4": [
+        "Ensure permissions on /etc/cron.daily are configured (Automated)",
+        "5.1.4: success",
+        "5.1.sh",
+        false
+    ],
+    "5.1.5": [
+        "Ensure permissions on /etc/cron.weekly are configured (Automated)",
+        "5.1.5: success",
+        "5.1.sh",
+        false
+    ],
+    "5.1.6": [
+        "Ensure permissions on /etc/cron.monthly are configured (Automated)",
+        "5.1.6: success",
+        "5.1.sh",
+        false
+    ],
+    "5.1.7": [
+        "Ensure permissions on /etc/cron.d are configured (Automated)",
+        "5.1.7: success",
+        "5.1.sh",
+        false
+    ],
+    "5.1.8": [
+        "Ensure cron is restricted to authorized users (Automated)",
+        "5.1.8: success",
+        "5.1.sh",
+        false
+    ],
+    "5.1.9": [
+        "Ensure at is restricted to authorized users (Automated)",
+        "5.1.9: success",
+        "5.1.sh",
+        false
+    ],
+    "5.2.1": [
+        "Ensure sudo is installed (Automated)",
+        "5.2.1: success",
+        "5.2.sh",
+        false
+    ],
+    "5.2.2": [
+        "Ensure sudo commands use pty (Automated)",
+        "5.2.2: success",
+        "5.2.sh",
+        false
+    ],
+    "5.2.3": [
+        "Ensure sudo log file exists (Automated)",
+        "5.2.3: success",
+        "5.2.sh",
+        false
+    ],
+    "5.3.1": [
+        "Ensure permissions on /etc/ssh/sshd_config are configured (Automated)",
+        "5.3.1: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.2": [
+        "Ensure permissions on SSH private host key files are configured (Automated)",
+        "5.3.2: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.3": [
+        "Ensure permissions on SSH public host key files are configured (Automated)",
+        "5.3.3: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.4": [
+        "Ensure SSH access is limited (Automated)",
+        "5.3.4: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.5": [
+        "Ensure SSH LogLevel is appropriate (Automated)",
+        "5.3.5: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.6": [
+        "Ensure SSH X11 forwarding is disabled (Automated)",
+        "5.3.6: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.7": [
+        "Ensure SSH MaxAuthTries is set to 4 or less (Automated)",
+        "5.3.7: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.8": [
+        "Ensure SSH IgnoreRhosts is enabled (Automated)",
+        "5.3.8: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.9": [
+        "Ensure SSH HostbasedAuthentication is disabled (Automated)",
+        "5.3.9: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.10": [
+        "Ensure SSH root login is disabled (Automated)",
+        "5.3.10: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.11": [
+        "Ensure SSH PermitEmptyPasswords is disabled (Automated)",
+        "5.3.11: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.12": [
+        "Ensure SSH PermitUserEnvironment is disabled (Automated)",
+        "5.3.12: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.13": [
+        "Ensure only strong Ciphers are used (Automated)",
+        "5.3.13: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.14": [
+        "Ensure only strong MAC algorithms are used (Automated)",
+        "5.3.14: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.15": [
+        "Ensure only strong Key Exchange algorithms are used",
+        "5.3.15: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.16": [
+        "Ensure SSH Idle Timeout Interval is configured (Automated)",
+        "5.3.16: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.17": [
+        "Ensure SSH LoginGraceTime is set to one minute or less (Automated)",
+        "5.3.17: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.18": [
+        "Ensure SSH warning banner is configured (Automated)",
+        "5.3.18: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.19": [
+        "Ensure SSH PAM is enabled (Automated)",
+        "5.3.19: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.20": [
+        "Ensure SSH AllowTcpForwarding is disabled (Automated)",
+        "5.3.20: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.21": [
+        "Ensure SSH MaxStartups is configured (Automated)",
+        "5.3.21: success",
+        "5.3.sh",
+        false
+    ],
+    "5.3.22": [
+        "Ensure SSH MaxSessions is limited (Automated)",
+        "5.3.22: success",
+        "5.3.sh",
+        false
+    ],
+    "5.4.1": [
+        "Ensure password creation requirements are configured (Automated)",
+        "5.4.1: success",
+        "5.4.sh",
+        false
+    ],
+    "5.4.2": [
+        "Ensure lockout for failed password attempts is configured (Automated)",
+        "5.4.2: success",
+        "5.4.sh",
+        false
+    ],
+    "5.4.3": [
+        "Ensure password reuse is limited (Automated)",
+        "5.4.3: success",
+        "5.4.sh",
+        false
+    ],
+    "5.4.4": [
+        "Ensure password hashing algorithm is SHA-512 (Automated)",
+        "5.4.4: success",
+        "5.4.sh",
+        false
+    ],
+    "5.5.1.1": [
+        "Ensure minimum days between password changes is configured (Automated)",
+        "5.5.1.1: success",
+        "5.5.sh",
+        false
+    ],
+    "5.5.1.2": [
+        "Ensure password expiration is 365 days or less (Automated)",
+        "5.5.1.2: success",
+        "5.5.sh",
+        false
+    ],
+    "5.5.1.3": [
+        "Ensure password expiration warning days is 7 or more (Automated)",
+        "5.5.1.3: success",
+        "5.5.sh",
+        false
+    ],
+    "5.5.1.4": [
+        "Ensure inactive password lock is 30 days or less (Automated)",
+        "5.5.1.4: success",
+        "5.5.sh",
+        false
+    ],
+    "5.5.1.5": [
+        "Ensure all users last password change date is in the past (Automated)",
+        "5.5.1.5: success",
+        "5.5.sh",
+        false
+    ],
+    "5.5.2": [
+        "Ensure system accounts are secured (Automated)",
+        "5.5.2: success",
+        "5.5.sh",
+        false
+    ],
+    "5.5.3": [
+        "Ensure default group for the root account is GID 0 (Automated)",
+        "5.5.3: success",
+        "5.5.sh",
+        false
+    ],
+    "5.5.4": [
+        "Ensure default user umask is 027 or more restrictive (Automated)",
+        "5.5.4: success",
+        "5.5.sh",
+        false
+    ],
+    "5.5.5": [
+        "Ensure default user shell timeout is 900 seconds or less (Automated)",
+        "5.5.5: success",
+        "5.5.sh",
+        false
+    ],
+    "5.7": [
+        "Ensure access to the su command is restricted (Automated)",
+        "5.7: success",
+        "5.7.sh",
+        false
+    ],
+    "6.1.2": [
+        "Ensure permissions on /etc/passwd are configured (Automated)",
+        "6.1.2: success",
+        "6.1.sh",
+        false
+    ],
+    "6.1.3": [
+        "Ensure permissions on /etc/passwd- are configured (Automated)",
+        "6.1.3: success",
+        "6.1.sh",
+        false
+    ],
+    "6.1.4": [
+        "Ensure permissions on /etc/group are configured (Automated)",
+        "6.1.4: success",
+        "6.1.sh",
+        false
+    ],
+    "6.1.5": [
+        "Ensure permissions on /etc/group- are configured (Automated)",
+        "6.1.5: success",
+        "6.1.sh",
+        false
+    ],
+    "6.1.6": [
+        "Ensure permissions on /etc/shadow are configured (Automated)",
+        "6.1.6: success",
+        "6.1.sh",
+        false
+    ],
+    "6.1.7": [
+        "Ensure permissions on /etc/shadow- are configured (Automated)",
+        "6.1.7: success",
+        "6.1.sh",
+        false
+    ],
+    "6.1.8": [
+        "Ensure permissions on /etc/gshadow are configured (Automated)",
+        "6.1.8: success",
+        "6.1.sh",
+        false
+    ],
+    "6.1.9": [
+        "Ensure permissions on /etc/gshadow- are configured (Automated)",
+        "6.1.9: success",
+        "6.1.sh",
+        false
+    ],
+    "6.1.10": [
+        "Ensure no world writable files exist (Automated)",
+        "6.1.10: success",
+        "6.1.sh",
+        false
+    ],
+    "6.1.11": [
+        "Ensure no unowned files or directories exist (Automated)",
+        "6.1.11: success",
+        "6.1.sh",
+        false
+    ],
+    "6.1.12": [
+        "Ensure no ungrouped files or directories exist (Automated)",
+        "6.1.12: success",
+        "6.1.sh",
+        false
+    ],
+    "6.1.13": [
+        "Audit SUID executables (Manual)",
+        "6.1.13: success",
+        "6.1.sh",
+        false
+    ],
+    "6.1.14": [
+        "Audit SGID executables (Manual)",
+        "6.1.14: success",
+        "6.1.sh",
+        false
+    ],
+    "6.2.1": [
+        "Ensure accounts in /etc/passwd use shadowed passwords (Automated)",
+        "6.2.1: success",
+        "6.2.sh",
+        false
+    ],
+    "6.2.2": [
+        "Ensure password fields are not empty (Automated)",
+        "6.2.2: success",
+        "6.2.sh",
+        false
+    ],
+    "6.2.3": [
+        "Ensure all groups in /etc/passwd exist in /etc/group (Automated)",
+        "6.2.3: success",
+        "6.2.sh",
+        false
+    ],
+    "6.2.4": [
+        "Ensure all users' home directories exist (Automated)",
+        "6.2.4: success",
+        "6.2.sh",
+        false
+    ],
+    "6.2.5": [
+        "Ensure users own their home directories (Automated)",
+        "6.2.5: success",
+        "6.2.sh",
+        false
+    ],
+    "6.2.6": [
+        "Ensure users' home directories permissions are 750 or more restrictive (Automated)",
+        "6.2.6: success",
+        "6.2.sh",
+        false
+    ],
+    "6.2.7": [
+        "Ensure users' dot files are not group or world writable (Automated)",
+        "6.2.7: success",
+        "6.2.sh",
+        false
+    ],
+    "6.2.8": [
+        "Ensure no users have .netrc files (Automated)",
+        "6.2.8: success",
+        "6.2.sh",
+        false
+    ],
+    "6.2.9": [
+        "Ensure no users have .forward files (Automated)",
+        "6.2.9: success",
+        "6.2.sh",
+        false
+    ],
+    "6.2.10": [
+        "Ensure no users have .rhosts files (Automated)",
+        "6.2.10: success",
+        "6.2.sh",
+        false
+    ],
+    "6.2.11": [
+        "Ensure root is the only UID 0 account (Automated)",
+        "6.2.11: success",
+        "6.2.sh",
+        false
+    ],
+    "6.2.12": [
+        "Ensure root PATH Integrity (Automated)",
+        "6.2.12: success",
+        "6.2.sh",
+        false
+    ],
+    "6.2.13": [
+        "Ensure no duplicate UIDs exist (Automated)",
+        "6.2.13: success",
+        "6.2.sh",
+        false
+    ],
+    "6.2.14": [
+        "Ensure no duplicate GIDs exist (Automated)",
+        "6.2.14: success",
+        "6.2.sh",
+        false
+    ],
+    "6.2.15": [
+        "Ensure no duplicate user names exist (Automated)",
+        "6.2.15: success",
+        "6.2.sh",
+        false
+    ],
+    "6.2.16": [
+        "Ensure no duplicate group names exist (Automated)",
+        "6.2.16: success",
+        "6.2.sh",
+        false
+    ],
+    "6.2.17": [
+        "Ensure shadow group is empty (Automated)",
+        "6.2.17: success",
+        "6.2.sh",
+        false
+    ],
+    "P1.1": [
+        "Default users are locked",
+        "P1.1: success",
+        "P1.sh",
+        false
+    ],
+    "P1.2": [
+        "Ensure all login users have no volume automounting in Desktop mode",
+        "P1.2: success",
+        "P1.sh",
+        false
+    ],
+    "P1.3": [
+        "Ensure Pi is booting into CLI instead of desktop",
+        "P1.3: success",
+        "P1.sh",
+        false
+    ],
+    "P1.4": [
+        "Limit open interfaces to SSH only",
+        "P1.4: success",
+        "P1.sh",
+        false
+    ],
+    "P1.5": [
+        "Ensure Apparmor is enabled in bootloader configuration",
+        "P1.5: success",
+        "P1.sh",
+        false
+    ],
+    "P1.6": [
+        "Disable display outputs",
+        "P1.6: success",
+        "P1.sh",
+        false
+    ],
+    "P1.7": [
+        "Ensure boot partition is read-only",
+        "P1.7: success",
+        "P1.sh",
+        false
+    ]
+}

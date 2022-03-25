@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>RAH - Web GUI</title>
+    <!-- Font Awesome        --><link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome.all.css') }}" />
+    <!-- Google Fonts Roboto --><link rel="stylesheet" href="{{ url_for('static', filename='css/google.robotofont.css2.css') }}" />
+    <!-- Bootstrap           --><link rel="stylesheet" href="{{ url_for('static', filename='css/Bootstrap/bootstrap.min.css') }}" />
+    <!-- MDB                 --><link rel="stylesheet" href="{{ url_for('static', filename='css/mdb.min.css') }}" />
+    <!-- PRISM               --><link rel="stylesheet" href="{{ url_for('static', filename='css/prism.css') }}" />
+
+    <style>
+      [class*="col"] {
+        padding: 1rem;
+        /* border: 2px solid #33b5e5; */
+        text-align: center;
+      }
+    </style>
+</head>
+
+<body>
+    <br><br>
+    <div class="container">
+        <div class="container">
+            <form action="" method="post">
+                <input class="btn btn-info btn-rounded ripple-surface" style="float:right" type="submit" value="Submit">
+                <br>
+                <div class="form-switch">
+                    <input class="form-check-input" type="checkbox" onClick="toggle(this)" /><strong>Global Toggle All</strong>
+                </div>
+                <div class="accordion" id="accordionExample">
+                    {# set reference_lst = {'1': 'Initial Setup', '2': 'Services', '3': 'Network Configuration', '4': 'Logging and Auditing', '5': 'Access, Authentication and Authorization', '6': 'System Maintenance', 'P1': 'Pi-Specific patches', 'NIL': 'Others'} #}
+                    
+                    {% for key in dct %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading{{ key }}">
+                            <button
+                                    class="accordion-button collapsed"
+                                    type="button"
+                                    data-mdb-toggle="collapse"
+                                    data-mdb-target="#collapse{{ key }}"
+                                    aria-expanded="true"
+                                    aria-controls="collapse{{ key }}"
+                            >
+                                {{ key + ' - ' + reference_lst[key] }}
+                            </button>
+                        </h2>
+                        <div
+                                id="collapse{{ key }}"
+                                class="accordion-collapse collapse"
+                                aria-labelledby="heading{{ key }}"
+                                data-mdb-parent="#accordionExample"
+                        >
+                            <div class="accordion-body">
+                                <br>
+                                <div class="container border shadow-3">
+                                    <br>
+                                    <div class="form-switch">
+                                        <input class="form-check-input" type="checkbox" onClick="toggle(this, '{{ key }}')" /><strong>Toggle All: '{{ key + ' - ' + reference_lst[key] }}' </strong>
+                                    </div>
+                                    <br>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    {% for key_2 in dct[key] %}
+                                    <div class="col-lg-3 col-md-4 col-sm-6">
+                                        <div class="form-switch">
+                                            <input class="form-check-input" type="checkbox" id="switcher{{ key }}_{{ (dct[key].keys() | list).index(key_2) }}" name="{{ key_2 }}" {% if dct[key][key_2][3] %}checked=""/{% endif %}>
+                                            <label class="form-check-label" for="switcher{{ key }}_{{ (dct[key].keys() | list).index(key_2) }}"
+                                            >{{ key_2 + ' ' + dct[key][key_2][0] }}</label>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                <br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+
+<!-- Bootstrap   --><script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap/bootstrap.min.js') }}"></script>
+<!-- MDB         --><script type="text/javascript" src="{{ url_for('static', filename='js/mdb.min.js') }}"></script>
+<!-- PRISM       --><script type="text/javascript" src="{{ url_for('static', filename='js/prism.js') }}"></script>
+<!-- MDB SNIPPET --><script type="text/javascript" src="{{ url_for('static', filename='js/dist/mdbsnippet.min.js') }}"></script>
+<!-- Popper      --><script type="text/javascript" src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+<script>
+    function toggle(source, number = 0) {
+        if (number == 0) {
+            checkboxes = document.querySelectorAll('input[type=checkbox]');
+        } else {
+            checkboxes = document.querySelectorAll('input[id*=switcher' + number + ']');
+        }
+        for(var i=0, n=checkboxes.length;i<n;i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+
+    $(document).ready(function() {
+        $("#sidebarCollapse").click(function() {
+            $("#sidebar").toggleClass("active");
+            $(this).toggleClass('active');
+        });
+    });
+    $("#aboutbutton").click(function() {
+        $('html, body').animate({
+            scrollTop: $("#aboutDiv").offset().top
+        }, 2000);
+    });
+</script>
+</html>

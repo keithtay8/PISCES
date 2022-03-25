@@ -1,0 +1,44 @@
+### Mandatory Access Control
+### 1.6.1.1 to 1.6.1.4
+
+
+## 1.6.1 - Configure AppArmor
+[1.6.1.1 || Ensure AppArmor is installed || Automated]{Active}
+dpkg -s apparmor | grep -E '(Status:|not installed)'
+	Status: install ok installed
+
+
+[1.6.1.2 || Ensure AppArmor is enabled in the bootloader configuration || Automated]{Inactive}
+grep "^\s*linux" /boot/grub/grub.cfg | grep -v "apparmor=1"
+grep "^\s*linux" /boot/grub/grub.cfg | grep -v "security=apparmor"
+
+
+[1.6.1.2 || (Raspbian) Ensure AppArmor is enabled in the bootloader configuration || Automated]{Active}
+cat /boot/cmdline.txt | grep -v "apparmor=1"
+cat /boot/cmdline.txt | grep -v "security=apparmor"
+
+
+[1.6.1.3 || (!) Ensure all AppArmor Profiles are in enforce or complain mode  || Automated]{Active}
+apparmor_status | grep profiles
+	~	[0-9]+ profiles are loaded.
+	~	[0-9]+ profiles are in enforce mode.
+	~	[0-9]+ profiles are in complain mode.
+	~	[0-9]+ processes have profiles defined.
+apparmor_status | grep processes
+	~	[0-9]+ processes have profiles defined.
+	~	[0-9]+ processes are in enforce mode.
+	~	[0-9]+ processes are in complain mode.
+	~	0 processes are unconfined but have a profile defined.
+
+
+[1.6.1.4 || (!) Ensure all AppArmor Profiles are enforcing (L2) || Automated]{Active}
+apparmor_status | grep profiles
+	~	[0-9]+ profiles are loaded.
+	~	[0-9]+ profiles are in enforce mode.
+	~	0 profiles are in complain mode.
+	~	[0-9]+ processes have profiles defined.
+apparmor_status | grep processes
+	~	[0-9]+ processes have profiles defined.
+	~	[0-9]+ processes are in enforce mode.
+	~	0 processes are in complain mode.
+	~	0 processes are unconfined but have a profile defined.

@@ -1,0 +1,25 @@
+### Set_Name
+### Comments are prefixed with '#', sample comment line here
+
+[0.1.2.1 || Name || Automated/Manual]{Active/Inactive}
+<AUDIT_COMMAND_1>
+	<EXPECTED_OUTPUT>
+<AUDIT_COMMAND_2>
+	<EXPECTED_OUTPUT>
+	<EXPECTED_OUTPUT_2>
+<AUDIT_COMMAND_3>
+	<No spacing between AUDIT_COMMAND entries for NO_OUTPUT_EXPECTED>
+<AUDIT_COMMAND_4>
+	<BLANK,should not be processed>
+<AUDIT_COMMAND_5>
+	~	<REGEX_MATCH>
+
+
+[0.1.2.2 || Name || Automated/Manual]{Active/Inactive}
+<AUDIT_COMMAND_1>
+	<OPTIONAL_OUTPUT_TO_EXPECT>
+
+
+<0.1.2.2>[0.1.2.3 || Name || Automated/Manual]{Active/Inactive}
+<EXECUTE_AUDIT_COMMAND_1_IF_0.1.2.2_PASSED>
+	<OPTIONAL_OUTPUT_TO_EXPECT>

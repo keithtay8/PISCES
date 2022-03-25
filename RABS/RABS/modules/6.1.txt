@@ -1,0 +1,71 @@
+### System File Permissions
+### 6.1.1 to 6.1.14
+
+
+[6.1.1 || (!) (L2) (DIY) Audit system file permissions || Manual]{Active}
+dpkg --verify <package name>
+
+
+[6.1.2 || Ensure permissions on /etc/passwd are configured || Automated]{Active}
+stat /etc/passwd
+	~	Access: \([0-9]644.+\sroot\).+\sroot\)
+
+
+[6.1.3 || Ensure permissions on /etc/passwd- are configured || Automated]{Active}
+stat /etc/passwd-
+	~	Access: \([0-9][0-6][04]{2}.+\sroot\).+\sroot\)
+
+
+[6.1.4 || Ensure permissions on /etc/group are configured || Automated]{Active}
+stat /etc/group
+	~	Access: \([0-9]644.+\sroot\).+\sroot\)
+
+
+[6.1.5 || Ensure permissions on /etc/group- are configured || Automated]{Active}
+stat /etc/group-
+	~	Access: \([0-9][0-6][04]{2}.+\sroot\).+\sroot\)
+
+
+[6.1.6 || (Ensure permissions on /etc/shadow are configured || Automated]{Active}
+stat /etc/shadow
+	~	Access: \([0-9][0-6][04]0.+\sroot\).+\s(root|shadow)\)
+
+
+[6.1.7 || Ensure permissions on /etc/shadow- are configured || Automated]{Active}
+stat /etc/shadow-
+	~	Access: \([0-9][0-6][04]0.+\sroot\).+\s(root|shadow)\)
+
+
+[6.1.8 || Ensure permissions on /etc/gshadow are configured || Automated]{Active}
+stat /etc/gshadow
+	~	Access: \([0-9][0-6][04]0.+\sroot\).+\s(root|shadow)\)
+
+
+[6.1.9 || Ensure permissions on /etc/gshadow- are configured || Automated]{Active}
+stat /etc/gshadow-
+	~	Access: \([0-9][0-6][04]0.+\sroot\).+\s(root|shadow)\)
+
+
+[6.1.10 || (!) (DIY) Ensure no world writable files exist || Automated]{Active}
+df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type f -perm -0002
+find 'insert_partition_here' -xdev -type f -perm -0002
+
+
+[6.1.11 || (!) (DIY) Ensure no unowned files or directories exist || Automated]{Active}
+df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser
+find 'insert_partition_here' -xdev -nouser
+
+
+[6.1.12 || (!) (DIY) Ensure no ungrouped files or directories exist || Automated]{Active}
+df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -nogroup
+find 'insert_partition_here' -xdev -nogroup
+
+[6.1.13 || (!) (DIY) Audit SUID executables || Manual]{Active}
+df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type f -perm -4000
+find 'insert_partition_here' -xdev -type f -perm -4000
+
+
+[6.1.14 || (!) (DIY) Audit SGID executables || Manual]{Active}
+df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type f -perm -2000
+find 'insert_partition_here' -xdev -type f -perm -2000
+

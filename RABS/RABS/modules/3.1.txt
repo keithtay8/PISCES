@@ -1,0 +1,11 @@
+### Disabled unused network protocols and devices
+### 3.1.1 to 3.1.2
+
+
+[3.1.1 || (L2) Disabled IPv6 || Manual]{Active}
+grep "^\s*linux" /boot/grub/grub.cfg | grep -v "ipv6.disable=1"
+
+
+[3.1.2 || (L2) Ensure wireless interfaces are disabled || Automated]{Active}
+./modules/3.1.2_audit.sh
+	Wireless is not enabled

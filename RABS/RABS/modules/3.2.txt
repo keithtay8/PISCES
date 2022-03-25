@@ -1,0 +1,26 @@
+### Network Parameters (Host Only)
+### 3.2.1 to 3.2.2
+
+
+[3.2.1 || Ensure packet redirect sending is disabled || Automated]{Active}
+sysctl net.ipv4.conf.all.send_redirects
+	net.ipv4.conf.all.send_redirects = 0
+sysctl net.ipv4.conf.default.send_redirects
+	net.ipv4.conf.default.send_redirects = 0
+grep -E "^\s*net\.ipv4\.conf\.all\.send_redirects" /etc/sysctl.conf /etc/sysctl.d/*
+	~	(.+:)?net\.ipv4\.conf\.all\.send_redirects\s*=\s*0
+grep -E "^\s*net\.ipv4\.conf\.default\.send_redirects" /etc/sysctl.conf /etc/sysctl.d/*
+	~	(.+:)?net\.ipv4\.conf\.default\.send_redirects\s*=\s*0
+
+
+[3.2.2 || Ensure IP forwarding is disabled || Automated]{Active}
+sysctl net.ipv4.ip_forward
+	net.ipv4.ip_forward = 0
+grep -E -s "^\s*net\.ipv4\.ip_forward\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf
+
+
+[3.2.2.1 || (IPv6) Ensure IP forwarding is disabled || Automated]{Active}
+#IF IPv6 is enabled
+sysctl net.ipv6.conf.all.forwarding
+	net.ipv6.conf.all.forwarding = 0
+grep -E -s "^\s*net\.ipv6\.conf\.all\.forwarding\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf

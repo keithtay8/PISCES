@@ -1,0 +1,17 @@
+### Configure sudo
+### 5.2.1 - 5.2.3
+
+
+[5.2.1 || Ensure sudo is installed || Automated]{Active}
+dpkg -s sudo || dpkg -s sudo-ldap
+	Status: install ok installed
+
+
+[5.2.2 || Ensure sudo commands use pty || Automated]{Active}
+grep -Ei '^\s*Defaults\s+([^#]+,\s*)?use_pty(,\s+\S+\s*)*(\s+#.*)?$' /etc/sudoers /etc/sudoers.d/*
+	~	^.*Defaults\s*use_pty
+
+
+[5.2.3 || Ensure sudo log file exists || Automated]{Active}
+grep -Ei '^\s*Defaults\s+logfile=\S+' /etc/sudoers /etc/sudoers.d/*
+	~	^.*Defaults\s*logfile=.+

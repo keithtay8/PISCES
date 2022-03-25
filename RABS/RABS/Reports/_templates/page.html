@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome        --><link rel="stylesheet" href="../_templates/css/fontawesome.all.css" />
+    <!-- Google Fonts Roboto --><link rel="stylesheet" href="../_templates/css/google.robotofont.css2.css" />
+    <!-- MDB                 --><link rel="stylesheet" href="../_templates/css/mdb.min.css" />
+    <!-- PRISM               --><link rel="stylesheet" href="../_templates/css/prism.css" />
+  </head>
+  <body>
+
+  {% set page_number = (dct.keys()|list)[0][0]|int %}
+  <title>Scan Results - #{{ page_number }}</title>
+
+  <div class="container">
+    <br><br>
+    <h2>{{ page_number }} - {{ lookup[page_number] }}</h2>
+    <h2>Scanner results:</h2>
+    <p>Click on the collapsible panel to open and close it.</p>
+    <a class='list-group-item list-group-item-info fixed-top' href='_Index.html'><<< Return</a>
+    <div class="accordion" id="accordionExample">
+
+      {# START HERE #}
+      {% set global_counter2=namespace(value=0, old_value=0, final_value=0) %}
+
+      {# 1: Build Tabs>>> 1.1, 1.2, etc #}
+      {% for wordlist, all_results in dct.items() %}
+        <div class="accordion-item">
+          <div id="heading_{{ wordlist[:-4]|replace('.', '_') }}" class="accordion-header">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-mdb-toggle="collapse"
+                data-mdb-target="#collapse_{{ wordlist[:-4]|replace('.', '_') }}"
+                aria-expanded="false"
+                aria-controls="collapse_{{ wordlist[:-4]|replace('.', '_') }}"
+              >
+                  {% if wordlist[:-4] in lookup_dct %}{{ wordlist[:-4] + ' - ' + lookup_dct[wordlist[:-4]] }}{% else %}{{ wordlist[:-4] }}{% endif %}
+              </button>
+          </div>
+
+          {# 2. Fill in contents #}
+          <div
+            id="collapse_{{ wordlist[:-4]|replace('.', '_') }}"
+            class="accordion-collapse collapse"
+            aria-labelledby="heading_{{ wordlist[:-4]|replace('.', '_') }}"
+            data-mdb-parent="#accordionExample">
+            <div class="accordion-body">
+              <p class="lead text-muted">Loaded modules: {{ all_results|length }}</p>
+              <p class="text-muted">Wordlist: {{ wordlist }}</p>
+
+              {# 2_: Dict to hold sorted contents by 'passed', 'failed', 'unexecuted' #}
+              {# 'passed': ['1.1', '1.2', etc] #}
+              {# 'failed': ['1.3', etc] #}
+              {# 'unexecuted': {'1.4': {'1.5': ['1.6', '1.7'], '1.8': ['1.9', etc]}} #}
+              {% set status_dct = dict() %}
+              {% set x=status_dct.__setitem__("passed", []) %}
+              {% set x=status_dct.__setitem__("failed", []) %}
+              {% set x=status_dct.__setitem__("manual", []) %}
+              {% set x=status_dct.__setitem__("unexecuted", dict()) %}
+
+              {% for module in all_results %}
+
+                {# Manual check: Check if 'true_manual' is True #}
+                {% if 'true_manual' in all_results[module] and all_results[module]['true_manual'] %}
+                  {% set x=status_dct.__setitem__("manual", status_dct['manual']+[module]) %}
+
+                {# Failed check: Check if 'failed' is not empty #}
+                {% elif all_results[module]['failed'] %}
+                  {% set x=status_dct.__setitem__("failed", status_dct['failed']+[module]) %}
+
+                {# Unexecuted check: Check if 'ref_module' is set #}
+                {% elif ('ref_module' in all_results[module].keys()) and (all_results[(all_results[module]['ref_module'])]['failed']) %}
+                  {% set temp_dct = status_dct['unexecuted'] %}
+                  {% if all_results[module]['ref_module'] not in status_dct['unexecuted'].keys() %}
+                    {% set x=temp_dct.__setitem__(all_results[module]['ref_module'], [module]) %}
+                  {% else %}
+                    {% set x=temp_dct.__setitem__(all_results[module]['ref_module'], temp_dct[all_results[module]['ref_module']] + [module]) %}
+                  {% endif %}
+                  {% set x=status_dct.__setitem__('unexecuted', temp_dct) %}
+
+                {# Passed defaulted #}
+                {% else %}
+                  {% set x=status_dct.__setitem__("passed", status_dct['passed']+[module]) %}
+
+                {% endif %}
+              {% endfor %}
+              {#{{ '[DEBUG] status_dct>>>', status_dct }}#}
+
+              {# 2a: Build 'Passed' contents #}
+                <h4>Passed ({{ status_dct['passed']|length }})</h4>
+                {% set global_counter2.old_value = global_counter2.value %}
+                {% for module in status_dct['passed'] %}
+                  <div id="heading_{{ global_counter2.value }}">
+                    <h2>
+                      <button
+                        class="btn btn-link btn-block text-start ps-0 border"
+                        type="button"
+                        data-mdb-toggle="collapse"
+                        data-mdb-target="#collapsePassed_{{ global_counter2.value }}"
+                        aria-expanded="false"
+                        aria-controls="collapsePassed_{{ global_counter2.value }}"
+                      >
+                        <div class="container">
+                            <div class="row">
+                                <div class="col"><a class="btn btn-success">{% set global_counter2._value = global_counter2.value %}{{ module }}</a></div>
+                                <div class="col">{{ all_results[module]['options'][0] }}</div>
+                                <div class="col">{{ all_results[module]['options'][1] }}</div>
+                            </div>
+                        </div>
+                      </button>
+                    </h2>
+                  </div>
+                  {# 2a@: Build dropdown 'more info' section #}
+
+                  {# Need get the larger of 'audit_length' and 'result_length' of every cmd comparison, used to reserve rows for each test case while in the same textbox #}
+                  {# {'0': 5, '1': 2, '2': 5, etc} #}
+                  {% set compare_dct = dict() %}
+                  {% for cmd in all_results[module]['audit'] %}
+                    {% set to_audit_lst = all_results[module]['audit'][cmd] %}
+                    {% set temp_index = (all_results[module]['audit']|list).index(cmd) %}
+
+                    {% if to_audit_lst|length > all_results[module]['result'][temp_index|string]|length + 1 %}
+                      {% set row_length = to_audit_lst|length %}
+                    {% else %}
+                      {% set row_length = all_results[module]['result'][temp_index|string]|length + 1 %}
+                    {% endif %}
+
+                    {% set x=compare_dct.__setitem__(temp_index|string, row_length) %}
+                  {% endfor %}
+
+                  {# Build contents and format according to row lengths stored in 'compare_dct' #}
+                  {# Create 2 strings, store cumulative output in both, WHILE maintaining whitespaces inbetween #}
+                  {% set audit_string = namespace(value='') %}
+                  {% set result_string = namespace(value='') %}
+
+                  {% for cmd in all_results[module]['audit'] %}
+                    {% set to_audit_lst = all_results[module]['audit'][cmd] %}
+                    {% set temp_index = (all_results[module]['audit'].keys()|list).index(cmd) %}
+
+                    {% set audit_string.value = audit_string.value + '#' + cmd + '&#13;&#10;' %}
+                    {% set result_string.value = result_string.value + '#' + cmd + '&#13;&#10;' %}
+
+                    {# AUDIT STRING PROCESSING - START #}
+                        {# Add each line from the audit command #}
+                        {% for line in to_audit_lst %}
+                          {% set audit_string.value = audit_string.value + line + '&#13;&#10;' %}
+                        {% endfor %}
+
+                        {# Top up missing lines if any by referencing 'compare_dct' #}
+                        {% if to_audit_lst|length < compare_dct[temp_index|string] %}
+                          {% for i in range(compare_dct[temp_index|string] - to_audit_lst|length) %}
+                            {% set audit_string.value = audit_string.value + '&#13;&#10;' %}
+                          {% endfor %}
+                        {% endif %}
+                    {# AUDIT STRING PROCESSING - END #}
+
+                    {# POSSIBLE RESULT STRING PROCESSING - START #}
+                        {% if temp_index|string in all_results[module]['result'].keys() %}
+                          {% set result_lst = all_results[module]['result'][temp_index|string] %}
+                          {% for line in result_lst %}
+                            {% set result_string.value = result_string.value + line.strip() + '&#13;&#10;' %}
+                          {% endfor %}
+                        {% endif %}
+
+                        {# Top up missing lines if any by referencing 'compare_dct' #}
+                        {% if result_lst|length < compare_dct[temp_index|string] %}
+                          {% for i in range(compare_dct[temp_index|string] - result_lst|length) %}
+                            {% set result_string.value = result_string.value + '&#13;&#10;' %}
+                          {% endfor %}
+                        {% endif %}
+                    {# POSSIBLE RESULT STRING PROCESSING - END #}
+                  {% endfor %}
+
+
+                  {% set final_row_length = namespace(value=0) %}
+                  {% for key in compare_dct %}
+                    {% set final_row_length.value = final_row_length.value + compare_dct[key] %}
+                  {% endfor %}
+                  {% set final_row_length.value = final_row_length.value + 1 + compare_dct|length %}
+                  <div
+                    id="collapsePassed_{{ global_counter2.value }}"
+                    class="collapse"
+                    aria-labelledby="heading_{{ global_counter2.value }}"
+                    data-parent="#accordionExample"
+                  >
+                    <div class="card card-body">
+                      <span class="badge bg-success">{{ module }}</span>
+                      <div class="badge bg-success">
+                        <button
+                            class="btn btn-info col-3"
+                            type="button"
+                            data-mdb-toggle="collapse"
+                            data-mdb-target="#expected_{{ module|replace('.', '_') }}"
+                            aria-expanded="true"
+                            aria-controls="collapseExample"
+                            >Expected
+                        </button>
+                        <div class="collapse show" id="expected_{{ module|replace('.', '_') }}">
+                          <div id="code_expected_{{ module|replace('.', '_') }}" class="code-toolbar col" style="max-height: 24em; overflow: auto;">
+                            <pre class="language-bash line-numbers"><code>{{ audit_string.value }}</code></pre>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="badge bg-success">
+                        <button
+                            class="btn btn-success col-3"
+                            type="button"
+                            data-mdb-toggle="collapse"
+                            data-mdb-target="#actual_{{ module|replace('.', '_') }}"
+                            aria-expanded="true"
+                            aria-controls="collapseExample"
+                            style="background-color: #008f39"
+                            >Actual
+                        </button>
+                        <div class="collapse show" id="actual_{{ module|replace('.', '_') }}">
+                          <div id="code_actual_{{ module|replace('.', '_') }}" class="code-toolbar col" style="max-height: 24em; overflow: auto;">
+                            <pre class="language-bash line-numbers"><code>{{ result_string.value }}</code></pre>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                  </div>
+                  
+                  <script>
+                    var topbox_{{ module|replace('.', '_') }} = document.getElementById("code_expected_{{ module|replace('.', '_') }}");
+                    var botbox_{{ module|replace('.', '_') }} = document.getElementById("code_actual_{{ module|replace('.', '_') }}");
+                    topbox_{{ module|replace('.', '_') }}.addEventListener('scroll', select_scroll_{{ module|replace('.', '_') }}, false);
+                    
+                    function select_scroll_{{ module|replace('.', '_') }}(e) {
+                      botbox_{{ module|replace('.', '_') }}.scrollTop = topbox_{{ module|replace('.', '_') }}.scrollTop;
+                    }
+                  </script>
+                {% set global_counter2.value = global_counter2.value + 1 %}
+                {% endfor %}
+
+                <br>
+                {# 2b: Build 'Failed' contents #}
+                  <h4>Failed ({{ status_dct['failed']|length }})</h4>
+                  {% set global_counter2.old_value = global_counter2.value %}
+                  {% for module in status_dct['failed'] %}
+                  <div id="heading_{{ global_counter2.value }}">
+                    <h2>
+                      <button
+                        class="btn btn-link btn-block text-start ps-0 border"
+                        type="button"
+                        data-mdb-toggle="collapse"
+                        data-mdb-target="#collapseFailed_{{ global_counter2.value }}"
+                        aria-expanded="false"
+                        aria-controls="collapseFailed_{{ global_counter2.value }}"
+                      >
+                        <div class="container">
+                            <div class="row">
+                                <div class="col"><a class="btn btn-danger">{% set global_counter2._value = global_counter2.value %}{{ module }}</a></div>
+                                <div class="col">{{ all_results[module]['options'][0] }}</div>
+                                <div class="col">{{ all_results[module]['options'][1] }}</div>
+                            </div>
+                        </div>
+                      </button>
+                    </h2>
+                  </div>
+                  {# 2b@: Build dropdown 'more info' section #}
+
+                  {# Need get the larger of 'audit_length' and 'result_length' of every cmd comparison, used to reserve rows for each test case while in the same textbox #}
+                  {# {'0': 5, '1': 2, '2': 5, etc} #}
+                  {% set compare_dct = dict() %}
+                  {% for cmd in all_results[module]['audit'] %}
+                    {% set to_audit_lst = all_results[module]['audit'][cmd] %}
+                    {% set temp_index = (all_results[module]['audit']|list).index(cmd) %}
+                    
+                    {% if to_audit_lst|length > all_results[module]['result'][temp_index|string]|length + 1 %}
+                      {% set row_length = to_audit_lst|length %}
+                    {% else %}
+                      {% set row_length = all_results[module]['result'][temp_index|string]|length + 1 %}
+                    {% endif %}
+
+                    {% set x=compare_dct.__setitem__(temp_index|string, row_length) %}
+                  {% endfor %}
+
+                  {# Build contents and format according to row lengths stored in 'compare_dct' #}
+                  {# Create 2 strings, store cumulative output in both, WHILE maintaining whitespaces inbetween #}
+                  {% set audit_string = namespace(value='') %}
+                  {% set result_string = namespace(value='') %}
+
+                  {% for cmd in all_results[module]['audit'] %}
+                    {% set to_audit_lst = all_results[module]['audit'][cmd] %}
+                    {% set temp_index = (all_results[module]['audit'].keys()|list).index(cmd) %}
+
+                    {% set audit_string.value = audit_string.value + '#' + cmd + '&#13;&#10;' %}
+                    {% set result_string.value = result_string.value + '#' + cmd + '&#13;&#10;' %}
+
+                    {# AUDIT STRING PROCESSING - START #}
+                      {# Add each line from the audit command #}
+                      {% for line in to_audit_lst %}
+                        {% set audit_string.value = audit_string.value + line + '&#13;&#10;' %}
+                      {% endfor %}
+
+                      {# Top up missing lines if any by referencing 'compare_dct' #}
+                      {% if to_audit_lst|length < compare_dct[temp_index|string] %}
+                        {% for i in range(compare_dct[temp_index|string] - to_audit_lst|length) %}
+                          {% set audit_string.value = audit_string.value + '&#13;&#10;' %}
+                        {% endfor %}
+                      {% endif %}
+                    {# AUDIT STRING PROCESSING - END #}
+
+                    {# POSSIBLE RESULT STRING PROCESSING - START #}
+                      {% if temp_index|string in all_results[module]['result'].keys() %}
+                        {# Add each line from the results #}
+                        {% set result_lst = all_results[module]['result'][temp_index|string] %}
+
+                        {% for line in result_lst %}
+                          {% set result_string.value = result_string.value + line.strip() + '&#13;&#10;' %}
+                        {% endfor %}
+                      {% endif %}
+
+                      {# Top up missing lines if any by referencing 'compare_dct' #}
+                      {% if result_lst|length < compare_dct[temp_index|string] %}
+                        {% for i in range(compare_dct[temp_index|string] - result_lst|length) %}
+                          {% set result_string.value = result_string.value + '&#13;&#10;' %}
+                        {% endfor %}
+                      {% endif %}
+                    {# POSSIBLE RESULT STRING PROCESSING - END #}
+                  {% endfor %}
+                  
+                  <div
+                    id="collapseFailed_{{ global_counter2.value }}"
+                    class="collapse"
+                    aria-labelledby="heading_{{ global_counter2.value }}"
+                    data-parent="#accordionExample"
+                  >
+                    <div class="card card-body">
+                      <span class="badge bg-danger">{{ module }}</span>
+                      <div class="badge bg-danger">
+                        <button
+                            class="btn btn-info col-3"
+                            type="button"
+                            data-mdb-toggle="collapse"
+                            data-mdb-target="#expected_{{ module|replace('.', '_') }}"
+                            aria-expanded="true"
+                            aria-controls="collapseExample"
+                            >Expected
+                        </button>
+                        <div class="collapse show" id="expected_{{ module|replace('.', '_') }}">
+                          <div id="code_expected_{{ module|replace('.', '_') }}" class="code-toolbar col" style="max-height: 24em; overflow: auto;">
+                            <pre class="language-bash line-numbers"><code>{{ audit_string.value }}</code></pre>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="badge bg-danger">
+                        <button
+                            class="btn btn-danger col-3"
+                            type="button"
+                            data-mdb-toggle="collapse"
+                            data-mdb-target="#actual_{{ module|replace('.', '_') }}"
+                            aria-expanded="true"
+                            aria-controls="collapseExample"
+                            style="background-color: #b0233c"
+                            >Actual
+                        </button>
+                        <div class="collapse show" id="actual_{{ module|replace('.', '_') }}">
+                          <div id="code_actual_{{ module|replace('.', '_') }}" class="code-toolbar col" style="max-height: 24em; overflow: auto;">
+                            <pre class="language-bash line-numbers"><code>{{ result_string.value }}</code></pre>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                  </div>
+                  
+                  <script>
+                    var topbox_{{ module|replace('.', '_') }} = document.getElementById("code_expected_{{ module|replace('.', '_') }}");
+                    var botbox_{{ module|replace('.', '_') }} = document.getElementById("code_actual_{{ module|replace('.', '_') }}");
+                    topbox_{{ module|replace('.', '_') }}.addEventListener('scroll', select_scroll_{{ module|replace('.', '_') }}, false);
+                    
+                    function select_scroll_{{ module|replace('.', '_') }}(e) {
+                      botbox_{{ module|replace('.', '_') }}.scrollTop = topbox_{{ module|replace('.', '_') }}.scrollTop;
+                    }
+                  </script>
+                  {% set global_counter2.value = global_counter2.value + 1 %}
+                  {% endfor %}
+              
+              <br>
+                {# 2c: Build 'Attention Required' contents #}
+                  <h4>Manual Intervention Required ({{ status_dct['manual']|length }})</h4>
+                  {% set global_counter2.old_value = global_counter2.value %}
+                  {% for module in status_dct['manual'] %}
+                  <div id="heading_{{ global_counter2.value }}">
+                    <h2>
+                      <button
+                        class="btn btn-link btn-block text-start ps-0 border"
+                        type="button"
+                        data-mdb-toggle="collapse"
+                        data-mdb-target="#collapseManual_{{ global_counter2.value }}"
+                        aria-expanded="false"
+                        aria-controls="collapseManual_{{ global_counter2.value }}"
+                      >
+                        <div class="container">
+                            <div class="row">
+                                <div class="col"><a class="btn btn-warning">{% set global_counter2._value = global_counter2.value %}{{ module }}</a></div>
+                                <div class="col">{{ all_results[module]['options'][0] }}</div>
+                                <div class="col">{{ all_results[module]['options'][1] }}</div>
+                            </div>
+                        </div>
+                      </button>
+                    </h2>
+                  </div>
+                  {# 2c@: Build dropdown 'more info' section #}
+
+                  {# Unlike the 'passed' and 'failed', this combines the audit (no rules returned) with the results #}
+                  {# Build contents #}
+                  {# Create ONLY 1 string, combine cumulative output from both, WHILE maintaining whitespaces inbetween #}
+                  {% set cumu_string = namespace(value='') %}
+
+                  {% for cmd in all_results[module]['audit'] %}
+                    {% set cumu_string.value = cumu_string.value + '#' + cmd + '&#13;&#10;' %}
+                    {% set temp_index = (all_results[module]['audit'].keys()|list).index(cmd) %}
+                    {% if temp_index|string in all_results[module]['result'].keys() %}
+                      {# Add each line from the results #}
+                      {% set result_lst = all_results[module]['result'][temp_index|string] %}
+
+                      {% for line in result_lst %}
+                        {% set cumu_string.value = cumu_string.value + line.strip() + '&#13;&#10;' %}
+                      {% endfor %}
+                    {% endif %}
+                    {% set cumu_string.value = cumu_string.value + '&#13;&#10;' %}
+                  {% endfor %}
+                  
+                  <div
+                    id="collapseManual_{{ global_counter2.value }}"
+                    class="collapse"
+                    aria-labelledby="heading_{{ global_counter2.value }}"
+                    data-parent="#accordionExample"
+                  >
+                    <div class="card card-body">
+                      <span class="badge bg-warning">{{ module }}</span>
+                      <div class="badge bg-warning">
+                        <button
+                            class="btn btn-info col-3"
+                            type="button"
+                            data-mdb-toggle="collapse"
+                            data-mdb-target="#manual_{{ module|replace('.', '_') }}"
+                            aria-expanded="true"
+                            aria-controls="collapseExample"
+                            style="background-color: #bf8000"
+                            >Actual
+                        </button>
+                        <div class="collapse show" id="manual_{{ module|replace('.', '_') }}">
+                          <div id="code_manual_{{ module|replace('.', '_') }}" class="code-toolbar col" style="max-height: 24em; overflow: auto;">
+                            <pre class="language-bash line-numbers"><code>{{ cumu_string.value }}</code></pre>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                  </div>
+                  {% set global_counter2.value = global_counter2.value + 1 %}
+                  {% endfor %}
+              
+              {# 2d: Build 'Unexecuted' contents #}
+                {# Count for total number of modules #}
+                {% set unexecuted_total_modules = namespace(value=0) %}
+                {% for linked_module, module_lst in status_dct['unexecuted'].items() %}
+                  {% set unexecuted_total_modules.value = unexecuted_total_modules.value + module_lst|length %}
+                {% endfor %}
+              <br>
+              <h4>Unexecuted ({{ unexecuted_total_modules.value }})</h4>
+              <table class="table">
+                <thead class="thead-dark">
+                <tbody>
+                  <!-- Unexecuted: 1.1.2 -->
+                  {% for linked_module, module_lst in status_dct['unexecuted'].items() %}
+                  <tr>
+                    <th scope="row" rowspan="{{ module_lst|length + 1 }}">{{ linked_module }}</th>
+                  </tr>
+                    {% for module in module_lst %}
+                  <tr>
+                    <th scope="row">{{ module }}</th>
+                    <td>{{ all_results[module]['options'][0] }}</td>
+                    <td>{{ all_results[module]['options'][1] }}</td>
+                  </tr>
+                    {% endfor %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {# END HERE #}
+
+    </div>
+  </div>
+
+  </body>
+  <div class='btn-group dropup'>
+    <button class='list-group-item list-group-item-info fixed-bottom' type='button' data-mdb-toggle='dropdown' aria-expanded='false'>Adjust Codebox size</button>
+    <ul class='dropdown-menu' style='positon: absolute' data-popper-placement='top-start'>
+      <li><button class='dropdown-item' onclick='codebox_resize(15)'>15 lines</button></li>
+      <li><button class='dropdown-item' onclick='codebox_resize(30)'>30 lines</button></li>
+      <li><button class='dropdown-item' onclick='codebox_resize(50)'>50 lines</a></li>
+      <li><button class='dropdown-item' onclick='codebox_resize(100)'>100 lines</button></li>
+    </ul>
+    <script>
+      function codebox_resize(int) {
+        codeboxes = document.getElementsByClassName('code-toolbar');
+        for(var i=0, n=codeboxes.length;i<n;i++) {
+            codeboxes[i].style.cssText = 'max-height: ' + parseInt((int * 1.6), 10) + 'em; overflow: auto;';
+        }
+      }
+    </script>
+  </div>
+  <script>
+    if (location.hash !== null && location.hash !== "") {
+      var target = document.getElementById(location.hash.substr(1));
+      target.classList.add('show');
+    };
+  </script>
+  <!-- MDB         --><script type="text/javascript" src="../_templates/js/mdb.min.js"></script>
+  <!-- PRISM       --><script type="text/javascript" src="../_templates/js/prism.js"></script>
+  <!-- MDB SNIPPET --><script type="text/javascript" src="../_templates/js/dist/mdbsnippet.min.js"></script>
+  <!-- Popper      --><script type="text/javascript" src="../_templates/js/popper.min.js"></script>
+</html>
