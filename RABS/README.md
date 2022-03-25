@@ -198,7 +198,7 @@ Audit commands may also return no outputs in certain situations. If this is no e
     CASE 3: The third audit command runs, and matches one rule: the literal string 'Found'
     CASE 4: The fourth audit command runs, but since there is no following indented line, no output is expected to issue a 'pass'
 
-If your output is more dynamic in nature, you can make use of regular expressions to match any unusual outputs. Each pattern will be wrapped in '^' and '$' before executing EXCEPT if '(?' prefixes the pattern (pattern will then not be wrapped). The rule will be compared against every line of the output, and if a match is found then a 'success' will be returned:
+If your output is more dynamic in nature, you can make use of regular expressions to match any unusual outputs. To do so, prefix your line with a "<tab>~<tab>" where "<tab>" is a tab space. Each pattern will be wrapped in '^' and '$' before executing EXCEPT if '(?' prefixes the pattern (pattern will then not be wrapped). The rule will be compared against every line of the output, and if a match is found then a 'success' will be returned:
 
     [1.2.3 || Sample || Automated]{Automated}
     grep 'password' /var/auth.log
