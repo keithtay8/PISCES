@@ -73,13 +73,13 @@ By default, the scanner doesn't run in verbose mode, and will only print message
 
 ### HTML Report
 
-![Saved Report - Index](https://github.com/keithtay8/PISCES/blob/main/images/rabs_index.PNG?raw=true)
+![Saved Report - Index](https://github.com/keithtay8/PISCES/blob/master/images/rabs_index.PNG?raw=true)
 
-![Saved Report - Page](https://github.com/keithtay8/PISCES/blob/main/images/rabs_page.PNG?raw=true)
+![Saved Report - Page](https://github.com/keithtay8/PISCES/blob/master/images/rabs_page.PNG?raw=true)
 
-![Saved Report - Page](https://github.com/keithtay8/PISCES/blob/main/images/rabs_page_expand.PNG?raw=true)
+![Saved Report - Page](https://github.com/keithtay8/PISCES/blob/master/images/rabs_page_expand.PNG?raw=true)
 
-![Saved Report - Page](https://github.com/keithtay8/PISCES/blob/main/images/rabs_page_expand_show.PNG?raw=true)
+![Saved Report - Page](https://github.com/keithtay8/PISCES/blob/master/images/rabs_page_expand_show.PNG?raw=true)
 
 ### Audit wordlist format
 
